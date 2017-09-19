@@ -46,7 +46,7 @@ extension Fixture {
         try set(file: name)
 
         let request: SignalProducer<T, NetworkError> = Fixture.request(endpoint: empty)
-        let observer = Observer<T, NetworkError> (
+        let observer = Signal<T, NetworkError>.Observer (
             value: next,
             failed: failed,
             completed: { File.host = ""; completed?() },

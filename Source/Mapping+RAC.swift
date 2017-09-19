@@ -4,7 +4,7 @@ import Result
 // MARK: -
 // MARK: Map JSON Response
 // MARK: -
-extension SignalProducerProtocol where Value == (Data, URLResponse), Error == NetworkError {
+extension SignalProducer where Value == (Data, URLResponse), Error == NetworkError {
     /**
      Attempts to convert `NSData` values (ignore `NSURLResponse`) into `AnyObject` JSON objects.
 
@@ -14,7 +14,7 @@ extension SignalProducerProtocol where Value == (Data, URLResponse), Error == Ne
         return attemptMap { (data, response) in
             do {
                 let json = try JSONSerialization.jsonObject(with: data as Data, options: .allowFragments)
-                return .success(json, response)
+                return .success((json, response))
             } catch {
                 return .failure(.incorrectDataReturned)
             }
@@ -25,7 +25,7 @@ extension SignalProducerProtocol where Value == (Data, URLResponse), Error == Ne
 // MARK: -
 // MARK: Map Network Error
 // MARK: -
-extension SignalProducerProtocol where Error == AnyError {
+extension SignalProducer where Error == AnyError {
     /**
      Maps `NSError` into `NetworkError`.
 
@@ -40,7 +40,7 @@ extension SignalProducerProtocol where Error == AnyError {
 // MARK: -
 // MARK: Extension, Signal
 // MARK: -
-public extension SignalProtocol {
+public extension Signal {
     /**
      Returns a signal that silences any errors.
      */
@@ -54,7 +54,7 @@ public extension SignalProtocol {
 // MARK: -
 // MARK: Extension, Signal Producer
 // MARK: -
-public extension SignalProducerProtocol {
+public extension SignalProducer {
     /**
      Returns a signal producer that silences any errors.
      */

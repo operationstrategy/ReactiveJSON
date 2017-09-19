@@ -4,7 +4,7 @@ extension Dictionary where Value: AnyObject {
     func toQueryItems() -> [URLQueryItem] {
         return map { (key: Key, value: AnyObject) in ("\(key)", value.description) }
             .map(URLQueryItem.init)
-            .sorted { $0.0.name < $0.1.name }
+            .sorted { $0.name < $1.name }
     }
 
     var percentEncodedQuery: String? {

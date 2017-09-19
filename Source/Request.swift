@@ -28,9 +28,9 @@ extension Singleton where Instance: ServiceHost {
         .attemptMap{
                 switch $0.0 {
                 case let json as [[String:AnyObject]]:
-                    return .success(json.map({ J($0) }).flatMap({ $0 }), $0.1)
+                    return .success((json.flatMap { J($0) }, $0.1))
                 case let json as [String:AnyObject]:
-                    return .success([json].map({ J($0) }).flatMap({ $0 }), $0.1)
+                    return .success(([json].flatMap { J($0) }, $0.1))
                 default:
                     return .failure(.incorrectDataReturned)
                 }
@@ -119,7 +119,7 @@ extension ServiceHost {
             .attemptMap { (json, response) -> Result<(C, URLResponse), NetworkError> in
                 switch (Mirror(reflecting: json).displayStyle, json) {
                 case (.some(.collection), let json as C):
-                    return .success(json, response)
+                    return .success((json, response))
                 default:
                     return .failure(.incorrectDataReturned)
                 }
